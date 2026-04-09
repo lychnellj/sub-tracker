@@ -50,5 +50,8 @@ jobs:
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
           RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
-        run: railway up --service $RAILWAY_SERVICE_ID --ci
+        run: |
+          railway whoami
+          railway up --project $RAILWAY_PROJECT_ID --service $RAILWAY_SERVICE_ID --ci
