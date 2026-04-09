@@ -1,16 +1,17 @@
+const dns = require("node:dns");
 const { Pool } = require("pg");
 
-const DATABASE_URL =
-  process.env.DATABASE_URL ||
-  "postgres://postgres:postgres@localhost:5432/subscription_tracker";
+dns.setDefaultResultOrder("ipv4first");
+
+const DATABASE_URL = process.env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/subscription_tracker";
 
 const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+	connectionString: DATABASE_URL,
+	ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
 });
 
 async function initDb() {
-  await pool.query(`
+	await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
       username TEXT UNIQUE NOT NULL,
@@ -19,10 +20,10 @@ async function initDb() {
     );
   `);
 
-  // Backward compatibility for earlier schema versions that used email.
-  await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS username TEXT");
+	// Backward compatibility for earlier schema versions that used email.
+	await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS username TEXT");
 
-  const legacyEmailColumn = await pool.query(`
+	const legacyEmailColumn = await pool.query(`
     SELECT EXISTS (
       SELECT 1
       FROM information_schema.columns
@@ -30,18 +31,18 @@ async function initDb() {
     ) AS exists
   `);
 
-  if (legacyEmailColumn.rows[0].exists) {
-    await pool.query(`
+	if (legacyEmailColumn.rows[0].exists) {
+		await pool.query(`
       UPDATE users
       SET username = LOWER(SPLIT_PART(email, '@', 1) || '_' || id)
       WHERE username IS NULL
     `);
-  }
+	}
 
-  await pool.query("CREATE UNIQUE INDEX IF NOT EXISTS users_username_key ON users (username)");
+	await pool.query("CREATE UNIQUE INDEX IF NOT EXISTS users_username_key ON users (username)");
 }
 
 module.exports = {
-  pool,
-  initDb,
+	pool,
+	initDb
 };
