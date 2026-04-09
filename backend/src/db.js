@@ -38,24 +38,7 @@ async function initDb() {
     );
   `);
 
-	// Backward compatibility for earlier schema versions that used email.
 	await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS username TEXT");
-
-	const legacyEmailColumn = await pool.query(`
-    SELECT EXISTS (
-      SELECT 1
-      FROM information_schema.columns
-      WHERE table_name = 'users' AND column_name = 'email'
-    ) AS exists
-  `);
-
-	if (legacyEmailColumn.rows[0].exists) {
-		await pool.query(`
-      UPDATE users
-      SET username = LOWER(SPLIT_PART(email, '@', 1) || '_' || id)
-      WHERE username IS NULL
-    `);
-	}
 
 	await pool.query("CREATE UNIQUE INDEX IF NOT EXISTS users_username_key ON users (username)");
 }
