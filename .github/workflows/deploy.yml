@@ -1,16 +1,17 @@
-name: CI
+name: PR Validation
 
 on:
   pull_request:
     branches:
       - main
+      - dev
   push:
     branches:
-      - main
+      - dev
   workflow_dispatch:
 
 jobs:
-  test:
+  backend-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,9 +30,9 @@ jobs:
         working-directory: backend
         run: npm test
 
-  build:
+  frontend-build:
     runs-on: ubuntu-latest
-    needs: test
+    needs: backend-test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
