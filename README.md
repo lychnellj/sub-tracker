@@ -1,6 +1,6 @@
 # sub-tracker
 
-Fullstack subscription tracker project (MVP phase), currently focused on authentication only.
+a to-be fullstack subscription tracker project (MVP phase), currently focused on authentication only as a part of a course examination
 
 At this stage, the app includes:
 
@@ -29,10 +29,11 @@ Subscription-tracking features will be added in a later phase.
 
 Deployment is currently set up as:
 
-1. Code is pushed/merged to `main`
+1. Code is pushed/merged to `dev` from feature branches
 2. GitHub Actions runs CI checks (tests + Docker build validation)
-3. Railway is connected to the GitHub repo and deploys from the configured branch
-4. Railway runs the containerized app and uses environment variables configured in Railway
+3. After actions are ran and tests pass, the feature merged to dev gets merged to main via a PR
+4. Railway is connected to the GitHub repo and deploys from the configured branch after the CI pipeline finishes successfully
+5. Railway runs the containerized app and uses environment variables configured in Railway
 
 Runtime secrets are stored in Railway Variables, including:
 
