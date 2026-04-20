@@ -29,11 +29,18 @@ Subscription-tracking features will be added in a later phase.
 
 Deployment is currently set up as:
 
-1. Code is pushed/merged to `dev` from feature branches
-2. GitHub Actions runs CI checks (tests + Docker build validation)
-3. After actions are ran and tests pass, the feature merged to dev gets merged to main via a PR
-4. Railway is connected to the GitHub repo and deploys from the configured branch after the CI pipeline finishes successfully
-5. Railway runs the containerized app and uses environment variables configured in Railway
+1. Create a short-lived feature branch from `main`
+2. Open a PR from the feature branch to `main`
+3. GitHub Actions runs required CI checks (tests + Docker build validation)
+4. PR can only be merged when required checks pass (branch protection)
+5. Railway deploys from `main` after a successful merge
+6. Railway runs the containerized app and uses environment variables configured in Railway
+
+Branch strategy:
+
+- `main` is the only long-lived branch
+- No `dev` branch is used
+- All changes go through one PR: `feature/*` -> `main`
 
 Runtime secrets are stored in Railway Variables, including:
 
