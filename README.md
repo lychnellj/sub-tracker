@@ -1,4 +1,4 @@
-# sub-tracker
+# Subscription tracker
 
 a to-be fullstack subscription tracker project (MVP phase), currently focused on authentication only as a part of a course examination
 
