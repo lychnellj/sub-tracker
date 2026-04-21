@@ -17,3 +17,12 @@ test("POST /api/auth/register rejects invalid payload", async () => {
 
   assert.equal(response.status, 400);
 });
+
+test("POST /api/auth/login rejects invalid payload", async () => {
+  const response = await request(app).post("/api/auth/login").send({
+    username: "x",
+    password: "short",
+  });
+
+  assert.equal(response.status, 400);
+});
