@@ -31,10 +31,11 @@ Deployment is currently set up as:
 
 1. Create a short-lived feature branch from `main`
 2. Open a PR from the feature branch to `main`
-3. GitHub Actions runs required CI checks (tests + Docker build validation)
+3. GitHub Actions runs required CI checks (tests + Docker build validation) on the PR to `main`
 4. PR can only be merged when required checks pass (branch protection)
-5. Railway deploys from `main` after a successful merge
-6. Railway runs the containerized app and uses environment variables configured in Railway
+5. After merge, GitHub Actions also runs on push to `main`
+6. Railway deploys from `main` after a successful merge
+7. Railway runs the containerized app and uses environment variables configured in Railway
 
 Branch strategy:
 
